@@ -1,0 +1,80 @@
+_schema-version: "3.2"
+ID: nexa-admissao-unico
+version: 0.0.1
+modules:
+- name: nexa-admissao-unico-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: nexa-admissao-unico-destination-service
+    parameters:
+      content-target: true
+  - name: nexa-admissao-unico_html_repo_host
+    parameters:
+      service-key:
+        name: nexa-admissao-unico_html_repo_host-key
+  - name: uaa_nexa-admissao-unico
+    parameters:
+      service-key:
+        name: uaa_nexa-admissao-unico-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: nexa_admissao_unico_nexa_admissao_unico_html_repo_host
+          ServiceInstanceName: nexa-admissao-unico-html5-app-host-service
+          ServiceKeyName: nexa-admissao-unico_html_repo_host-key
+          sap.cloud.service: nexa-admissao-unico
+        - Authentication: OAuth2UserTokenExchange
+          Name: nexa_admissao_unico_uaa_nexa_admissao_unico
+          ServiceInstanceName: nexa-admissao-unico-xsuaa-service
+          ServiceKeyName: uaa_nexa-admissao-unico-key
+          sap.cloud.service: nexa-admissao-unico
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: nexa-admissao-unico_ui_deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: nexa-admissao-unico_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - nexa-admissao-unico-module-content.zip
+      name: nexa-admissao-unico-module
+      target-path: resources/
+- name: nexa-admissao-unico-module
+  type: html5
+  path: nexa-admissao-unico-module
+  build-parameters:
+    builder: custom
+    commands:
+    - npm install
+    - npm run build
+    supported-platforms: []
+resources:
+- name: nexa-admissao-unico-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+    service: destination
+    service-name: nexa-admissao-unico-destination-service
+    service-plan: lite
+- name: nexa-admissao-unico_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: nexa-admissao-unico-html5-app-host-service
+    service-plan: app-host
+- name: uaa_nexa-admissao-unico
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: nexa-admissao-unico-xsuaa-service
+    service-plan: application

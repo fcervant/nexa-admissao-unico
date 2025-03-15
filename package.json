@@ -1,0 +1,12 @@
+{
+  "name": "project",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@sap/approuter": "14.4.2",
+    "@sap/html5-repo-mock": "2.1.5"
+  },
+  "scripts": {
+    "build-nexa-admissao-unico-module": "cd nexa-admissao-unico-module && if [ ! -d ${workspaceFolder}/nexa-admissao-unico/nexa-admissao-unico-module/node_modules/@vue/cli-service ] && [ ! -d ${workspaceFolder}/nexa-admissao-unico/node_modules/@vue/cli-service ]; then npm i; fi && npm run build"
+  }
+}
