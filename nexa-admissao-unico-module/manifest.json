@@ -1,0 +1,11 @@
+{
+  "sap.app": {
+    "id": "nexa-admissao-unico-module",
+    "applicationVersion": {
+      "version": "1.0.0"
+    }
+  },
+  "sap.cloud": {
+    "service": "nexa-admissao-unico"
+  }
+}
